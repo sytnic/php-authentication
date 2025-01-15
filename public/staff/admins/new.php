@@ -43,6 +43,8 @@ if(is_post_request()) {
   <div class="admin new">
     <h1>Create Admin</h1>
 
+    <?php //echo password_hash('password1234', PASSWORD_BCRYPT); ?>
+
     <?php echo display_errors($errors); ?>
 
     <form action="<?php echo url_for('/staff/admins/new.php'); ?>" method="post">

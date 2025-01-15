@@ -38,7 +38,9 @@ $admin = find_admin_by_id($id);
       </dl>
       <dl>
         <dt>Username</dt>
-        <dd><?php echo h($admin['username']); ?></dd>
+        <dd><?php echo h($admin['username']); ?><br>
+            <?php //echo h($admin['hashed_password']); ?>
+        </dd>
       </dl>
     </div>
 
