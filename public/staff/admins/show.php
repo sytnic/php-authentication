@@ -39,7 +39,9 @@ $admin = find_admin_by_id($id);
       <dl>
         <dt>Username</dt>
         <dd><?php echo h($admin['username']); ?><br>
-            <?php //echo h($admin['hashed_password']); ?>
+            <?php //echo h($admin['hashed_password']); 
+                  // Это чтоб посмотреть то же, что хранится в БД  
+            ?>
         </dd>
       </dl>
     </div>

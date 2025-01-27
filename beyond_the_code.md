@@ -1,3 +1,5 @@
+Exercise Files
+
 https://github.com/LinkedInLearning/php-user-authentication-2892138
 
 ## 005-Creating the database table
