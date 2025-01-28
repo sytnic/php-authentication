@@ -8,4 +8,10 @@ function log_in_admin($admin) {
   return true;
 }
 
+function log_out_admin() {
+  unset($_SESSION['admin_id']);
+  unset($_SESSION['username']);
+  return true;
+}
+
 ?>
