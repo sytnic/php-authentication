@@ -86,5 +86,27 @@ https://github.com/LinkedInLearning/php-user-authentication-2892138
 
 - Users must update passwords through the reset process
 
-##
+## 014-Preventing weak passwords
+
+1) 
+Помимо прочего, можно сохранять предыдущие хэши паролей в отдельной таблице. Далее, при смене пароля, сравнивать (password_verify()) новый хэш со старым и, если они совпадут, выдать сообщение, что пароль не может быть как бывший пароль.  
+
+2) 
+Также можно запретить пароли, утекшие в Интернет. Базу хэшей и доступ по API можно получить на  
+
+https://haveibeenpwned.com/  
+
+https://haveibeenpwned.com/API/v2
+
+3) 
+Исследования показали, что не надо требовать регулярную смену паролей. Это приводит к созданию слабых паролей.  
+Подробнее тут  
+
+https://www.nist.gov/publications/digital-identity-guidelines
+
+## 
+
+
+
+
 
