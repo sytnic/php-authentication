@@ -76,7 +76,15 @@ https://github.com/LinkedInLearning/php-user-authentication-2892138
     SHOW TABLES;
     SHOW FIELDS FROM admins;
 
-## 
+## 011-Challenge
 
+Способы обновления пароля при обновлении данных пользователя:
 
+- Admins cannot update user passwords
+- Separate forms for editing user and editing password
+- Only hash and update password if a password was sent.  Здесь будет реализован этот вариант.
+
+- Users must update passwords through the reset process
+
+##
 

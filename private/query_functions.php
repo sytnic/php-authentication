@@ -41,6 +41,19 @@
 
   function validate_admin($admin, $options=[]) {
 
+    // password_required надо понимать как - проверить пароль
+    // ['password_required'] берёт значение из булева $password_sent
+
+    // если ['password_required'] задан как false, вернётся false
+    // т.е. пароль не отправлен - проверять пароль не требуется
+    // если ['password_required'] задан как true, вернётся true
+    // т.е. пароль отправлен - проверять пароль требуется
+    
+    // если ['password_required'] не задан, вернётся true
+    // т.е. проверять пароль требуется по умолчанию
+    
+    $password_required = $options['password_required'] ?? true;
+
     if(is_blank($admin['first_name'])) {
       $errors[] = "First name cannot be blank.";
     } elseif (!has_length($admin['first_name'], array('min' => 2, 'max' => 255))) {
@@ -69,15 +82,17 @@
       $errors[] = "Username not allowed. Try another.";
     }
 
-    if(is_blank($admin['password'])) {
-      $errors[] = "Password cannot be blank.";
-    }
+    if($password_required) {
+      if(is_blank($admin['password'])) {
+        $errors[] = "Password cannot be blank.";
+      }
 
-    if(is_blank($admin['confirm_password'])) {
-      $errors[] = "Confirm password cannot be blank.";
-    } elseif ($admin['password'] !== $admin['confirm_password']) {
-      $errors[] = "Password and Confirm password must much.";
-    } 
+      if(is_blank($admin['confirm_password'])) {
+        $errors[] = "Confirm password cannot be blank.";
+      } elseif ($admin['password'] !== $admin['confirm_password']) {
+        $errors[] = "Password and Confirm password must much.";
+      } 
+    }
 
     return $errors;
   }
@@ -117,7 +132,16 @@
   function update_admin($admin) {
     global $db;
 
-    $errors = validate_admin($admin);
+    // если пароль не пустой, присвоить значение переменной "пароль отправлен",
+    // возвращается true, когда пароль вбит
+    // или false, когда пароль не вбит (null и '') 
+    // (при не вбитом в форму значении, отправляется пустая строка)
+    $password_sent = !is_blank($admin['password']);
+
+    // в опциональных аргументах 
+    // password_required может принять true или false
+    // password_required надо понимать как - проверить пароль
+    $errors = validate_admin($admin, ['password_required'=> $password_sent]);
     if (!empty($errors)) {
       return $errors;
     }
@@ -128,7 +152,12 @@
     $sql .= "first_name='" . db_escape($db, $admin['first_name']) . "', ";
     $sql .= "last_name='" . db_escape($db, $admin['last_name']) . "', ";
     $sql .= "email='" . db_escape($db, $admin['email']) . "', ";
-    $sql .= "hashed_password='" . db_escape($db, $hashed_password) . "', ";
+    // если пароль отправлен (true), то
+    // захешировать его и добавить в SQL
+    if($password_sent) {
+      $hashed_password = password_hash($admin['password'], PASSWORD_BCRYPT);
+      $sql .= "hashed_password='" . db_escape($db, $hashed_password) . "', ";
+    }
     $sql .= "username='" . db_escape($db, $admin['username']) . "' ";
     $sql .= "WHERE id='" . db_escape($db, $admin['id']) . "' ";
     $sql .= "LIMIT 1";
