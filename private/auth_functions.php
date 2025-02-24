@@ -37,10 +37,32 @@ function is_logged_in() {
   return isset($_SESSION['admin_id']);
 }
 
+// Returns true if a page is in the allow-list and is
+// exempt from user authentication
+// Возвращается истина, если страница, к-рая была вызвана (login.php),
+// совпала с данными в массиве.
+// Возвращается ложь, если страница, к-рая была вызвана, 
+// не перечислена в массиве.
+function page_exempt_from_auth() {
+  $no_auth_pages = [
+    '/staff/login.php'
+  ];
+  $current_page = str_replace(WWW_ROOT, '', $_SERVER['SCRIPT_NAME']);
+  // If it is in the array, it is not restricted
+  return in_array($current_page, $no_auth_pages);
+}
+
 // Call require_login() at the top of any page which needs to
 // require a valid login before granting access to the page.
+// Теперь, если пользователь не вошёл
+// и выполняет доступ со страницы login.php, 
+// то редирект не запускается, ветка else 
+// (перевёрнутое !page_exemt равно false).
+// Если не вошёл и выполняет доступ с других страниц, 
+// то происходит редирект 
+// (перевёрнутое !page_exemt равно true).
 function require_login() {
-  if(!is_logged_in()) {
+  if(!is_logged_in() && !page_exempt_from_auth()) {
     redirect_to(url_for('/staff/login.php'));
   } else {
     // Do nothing, let the rest of the page proceed.
